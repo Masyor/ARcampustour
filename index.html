@@ -1,20 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AR Indoor Nav</title>
+  <meta charset="utf-8">
+  <title>AR Indoor Navigation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- A-Frame & AR.js -->
   <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+
+  <style>
+    body { margin: 0; overflow: hidden; }
+    #ui {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Arial, sans-serif;
+      z-index: 100;
+    }
+  </style>
 </head>
 <body>
-  <a-scene embedded arjs>
-    <a-box position='0 0.5 -3' material='color: red;'></a-box>
-    <a-marker-camera preset='hiro'></a-marker-camera>
+
+  <!-- Simple UI -->
+  <div id="ui">
+    <button id="startBtn">Start AR Guidance</button>
+  </div>
+
+  <!-- AR Scene -->
+  <a-scene
+    embedded
+    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+    vr-mode-ui="enabled: false"
+  >
+    <!-- Camera with user height (1.6m ≈ eye level) -->
+    <a-camera-static></a-camera-static>
+
+    <!-- AR Arrow pointing forward -->
+    <a-entity
+      id="arrow"
+      visible="false"
+      gltf-model="https://cdn.aframe.io/examples/aframe-logo.glb" 
+      scale="0.4 0.4 0.4"
+      rotation="90 0 0"
+      position="0 -0.5 5"
+    ></a-entity>
+
   </a-scene>
-  <p>Select destination: <button onclick="startNav()">Room 305</button></p>
+
   <script>
-    function startNav() {
-      alert("Walk forward! Follow the red box in AR view.");
-    }
+    document.getElementById('startBtn').addEventListener('click', function() {
+      document.getElementById('arrow').setAttribute('visible', true);
+      this.disabled = true;
+      this.textContent = "Follow the arrow!";
+    });
   </script>
+
 </body>
 </html>
